@@ -5,8 +5,10 @@ import math
 import torch
 import torchaudio
 
+import dagster as dg
+
 TARGET_SAMPLE_RATE = 16000
-NOISE_DIR = "/home/baks/Documents/work/exploration/dagster-tutorial/noise_folder"
+NOISE_DIR = dg.EnvVar("NOISE_FOLDER_PATH").get_value()
 
 
 class ResampleAudio:
