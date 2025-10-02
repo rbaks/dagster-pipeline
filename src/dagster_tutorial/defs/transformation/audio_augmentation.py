@@ -1,5 +1,6 @@
 import os
 import pathlib
+from pathlib import Path
 import random
 import math
 import torch
@@ -50,17 +51,22 @@ class RandomSpeedChange:
 
 
 class RandomBackgroundNoise:
-    def __init__(self, sample_rate, noise_dir, min_snr_db=0, max_snr_db=15):
+    def __init__(self, sample_rate, min_snr_db=0, max_snr_db=15):
         self.sample_rate = sample_rate
         self.min_snr_db = min_snr_db
         self.max_snr_db = max_snr_db
+        self.noise_dir = (
+            Path(__file__).resolve().parent.parent.parent.parent.parent / "noise_folder"
+        )
 
-        if not os.path.exists(noise_dir):
-            raise IOError(f"Noise directory `{noise_dir}` does not exist")
+        if not os.path.exists(self.noise_dir):
+            raise IOError(f"Noise directory `{self.noise_dir}` does not exist")
 
-        self.noise_files_list = list(pathlib.Path(noise_dir).glob("**/*.wav"))
+        self.noise_files_list = list(self.noise_dir.glob("**/*.wav"))
         if len(self.noise_files_list) == 0:
-            raise IOError(f"No .wav file found in the noise directory `{noise_dir}`")
+            raise IOError(
+                f"No .wav file found in the noise directory `{self.noise_dir}`"
+            )
 
     def __call__(self, data):
         audio_data, sample_rate = data
@@ -110,6 +116,6 @@ compose_transform = ComposeTransform(
     [
         ResampleAudio(target_sample_rate=TARGET_SAMPLE_RATE),
         RandomSpeedChange(sample_rate=TARGET_SAMPLE_RATE),
-        RandomBackgroundNoise(sample_rate=TARGET_SAMPLE_RATE, noise_dir=NOISE_DIR),
+        RandomBackgroundNoise(sample_rate=TARGET_SAMPLE_RATE),
     ]
 )

@@ -11,7 +11,6 @@ import tempfile
 from pydub import AudioSegment
 
 from dagster_tutorial.defs.extraction.assets import annotations
-from .utils import slice_audio_segments_bytes, augment_audio_slices
 
 inner_id_partition = dg.DynamicPartitionsDefinition(name="inner_id_partition")
 
@@ -67,6 +66,8 @@ def partition_creator_sensor(
 
 @dg.asset(kinds={"gcs"}, partitions_def=inner_id_partition, code_version="v1")
 def audio_slices(context: dg.AssetExecutionContext, annotations, gcs: GCSResource):
+    from .utils import slice_audio_segments_bytes
+
     inner_id = context.partition_key
 
     annotations_same_inner_id = [
@@ -81,6 +82,8 @@ def audio_slices(context: dg.AssetExecutionContext, annotations, gcs: GCSResourc
 
 @dg.asset(kinds={"json"}, partitions_def=inner_id_partition, code_version="v1")
 def augmented_slices(context: dg.AssetExecutionContext, audio_slices):
+    from .utils import augment_audio_slices
+
     partition_key = context.partition_key
 
     audio_slices_same_inner_id = [
