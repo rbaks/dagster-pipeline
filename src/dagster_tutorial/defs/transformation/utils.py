@@ -20,7 +20,7 @@ def augment_audio_slices(audio_slices):
     for s in audio_slices:
         wav_bytes = s.get("sliced_audio_bytes")
         if not wav_bytes:
-            context.log.warning(f"slice {s.get('slice_number')} has no bytes, skipping")
+            # context.log.warning(f"slice {s.get('slice_number')} has no bytes, skipping")
             continue
 
         data, sr = sf.read(io.BytesIO(wav_bytes), dtype="float32")

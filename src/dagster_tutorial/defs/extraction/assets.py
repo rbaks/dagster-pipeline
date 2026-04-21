@@ -16,3 +16,8 @@ def annotations(context: dg.AssetExecutionContext, label_studio_project_json):
     inner_ids = list(set([item["inner_id"] for item in results]))
     context.add_asset_metadata({"inner_ids": dg.MetadataValue.json(inner_ids)})
     return results
+
+@dg.asset(kinds={"python"}, code_version="v1")
+def flush(label_studio_project_json):
+    with open("/teamspace/studios/this_studio/dagster-pipeline/src/dagster_tutorial/data/project.json", "w") as f:
+        json.dump(label_studio_project_json, f)

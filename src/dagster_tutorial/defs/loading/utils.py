@@ -5,7 +5,7 @@ import soundfile as sf
 
 
 def process_audio_item(item):
-    audio_bytes = item.get("audio_bytes")
+    audio_bytes = item.get("sliced_audio_bytes")
 
     if not audio_bytes:
         return None

@@ -202,5 +202,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-keys
-noise_folder
+keys/
+noise_folder/
+src/dagster_tutorial/defs/data/
+src/dagster_tutorial/data/
